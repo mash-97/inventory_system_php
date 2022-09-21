@@ -12,17 +12,28 @@
    $req_fields = array('product-title','product-categorie','product-quantity','buying-price', 'saleing-price' );
    validate_fields($req_fields);
    if(empty($errors)){
+    if (is_null($_POST['product-photo']) || $_POST['product-photo'] === "") {
+      $media_id = '0';
+    } else {
+      $media_id = remove_junk($db->escape($_POST['product-photo']));
+    }
+
+    $photo = new Media();
+    $photo->upload($_FILES['file_upload']);
+    if($photo->process_media()){
+        $session->msg('s','photo has been uploaded.');
+        $media_id = find_media_id($photo->fileName, $photo->fileType);
+    } else{
+      $session->msg('d',join($photo->errors));
+    }
+
      $p_name  = remove_junk($db->escape($_POST['product-title']));
      $p_cat   = remove_junk($db->escape($_POST['product-categorie']));
      $p_sid   = remove_junk($db->escape($_POST['product_supplier_id']));
      $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
      $p_buy   = remove_junk($db->escape($_POST['buying-price']));
      $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
-     if (is_null($_POST['product-photo']) || $_POST['product-photo'] === "") {
-       $media_id = '0';
-     } else {
-       $media_id = remove_junk($db->escape($_POST['product-photo']));
-     }
+
      $date    = make_date();
      $query  = "INSERT INTO products (";
      $query .=" name,quantity,buy_price,sale_price,categorie_id,media_id,date, supplier_id";
@@ -96,7 +107,7 @@
               </div>
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <select class="form-control" name="product_supplier_id">
                       <option value="">Select Supplier</option>
                     <?php  foreach ($all_suppliers as $cat): ?>
@@ -104,6 +115,12 @@
                         <?php echo $cat['full_name'] ?> (<?php echo $cat['address']; ?>)</option>
                     <?php endforeach; ?>
                     </select>
+                  </div>
+                  <div class="col-md-6">
+                      <span>
+                        <label>or Upload Photo</label>
+                        <input type="file" name="file_upload" multiple="multiple" class="form-control" style="float: right"/>
+                      </span>
                   </div>
                 </div>
               </div>

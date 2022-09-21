@@ -22,7 +22,6 @@ function per_monthly_sales($monthly_sales){
   return $per_monthly_sales;
 }
 
-
 // expected_profit = (sold_quantity * product_sale_price) - (sold_quantity * product_buy_price)
 // actual_profit = (sold_price) - (sold_quantity * product_buy_price)
 
