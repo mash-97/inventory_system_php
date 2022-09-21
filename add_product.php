@@ -17,15 +17,20 @@
     } else {
       $media_id = remove_junk($db->escape($_POST['product-photo']));
     }
-
+    $tmp = "==> ";
     $photo = new Media();
     $photo->upload($_FILES['file_upload']);
     if($photo->process_media()){
         $session->msg('s','photo has been uploaded.');
+        $tmp .=$session->msg;
         $media_id = find_media_id($photo->fileName, $photo->fileType);
+        $tmp .= $media_id;
     } else{
       $session->msg('d',join($photo->errors));
     }
+    $tmp .= $photo->fileName;
+    $tmp .= "|";
+    $tmp .= $photo->fileType;
 
      $p_name  = remove_junk($db->escape($_POST['product-title']));
      $p_cat   = remove_junk($db->escape($_POST['product-categorie']));
@@ -74,7 +79,7 @@
         </div>
         <div class="panel-body">
          <div class="col-md-12">
-          <form method="post" action="add_product.php" class="clearfix">
+          <form method="post" action="add_product.php" class="clearfix" enctype="multipart/form-data">
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon">

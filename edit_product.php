@@ -20,17 +20,29 @@ if(!$product){
     validate_fields($req_fields);
 
    if(empty($errors)){
+    
+      if (is_null($_POST['product-photo']) || $_POST['product-photo'] === "") {
+        $media_id = '0';
+      } else {
+        $media_id = remove_junk($db->escape($_POST['product-photo']));
+      }
+
+      $photo = new Media();
+      $photo->upload($_FILES['file_upload']);
+      if($photo->process_media()){
+          $session->msg('s','photo has been uploaded.');
+          $media_id = find_media_id($photo->fileName, $photo->fileType);
+      } else{
+        $session->msg('d',join($photo->errors));
+      }
+       
        $p_name  = remove_junk($db->escape($_POST['product-title']));
        $p_cat   = (int)$_POST['product-categorie'];
        $p_sid   = (int)$_POST['product_supplier_id'];
        $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
        $p_buy   = remove_junk($db->escape($_POST['buying-price']));
        $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
-       if (is_null($_POST['product-photo']) || $_POST['product-photo'] === "") {
-         $media_id = '0';
-       } else {
-         $media_id = remove_junk($db->escape($_POST['product-photo']));
-       }
+
        $query   = "UPDATE products SET";
        $query  .=" name ='{$p_name}', quantity ='{$p_qty}',";
        $query  .=" buy_price ='{$p_buy}', sale_price ='{$p_sale}', categorie_id ='{$p_cat}',media_id='{$media_id}', supplier_id='{$p_sid}'";
@@ -68,7 +80,7 @@ if(!$product){
         </div>
         <div class="panel-body">
          <div class="col-md-7">
-           <form method="post" action="edit_product.php?id=<?php echo (int)$product['id'] ?>">
+           <form method="post" action="edit_product.php?id=<?php echo (int)$product['id'] ?>" enctype="multipart/form-data">
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon">
@@ -102,7 +114,7 @@ if(!$product){
 
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <select class="form-control" name="product_supplier_id">
                       <option value="">Select Supplier</option>
                     <?php  foreach ($all_suppliers as $cat): ?>
@@ -110,6 +122,12 @@ if(!$product){
                         <?php echo $cat['full_name'] ?> (<?php echo $cat['address']; ?>)</option>
                     <?php endforeach; ?>
                     </select>
+                  </div>
+                  <div class="col-md-6">
+                      <span>
+                        <label>or Upload Photo</label>
+                        <input type="file" name="file_upload" multiple="multiple" class="form-control" style="float: right"/>
+                      </span>
                   </div>
                 </div>
               </div>

@@ -170,6 +170,23 @@ function tableExists($table){
     $result = $db->query($sql);
     return($db->num_rows($result) === 0 ? true : false);
   }
+
+
+function find_media_id($file_name, $file_type)
+{
+  global $db;
+
+  $sql = "SELECT id FROM media WHERE file_name='{$file_name}' and file_type='{$file_type}' LIMIT 1;";
+
+  if(tableExists("media")){
+        $sql = $db->query($sql);
+        if($result = $db->fetch_assoc($sql))
+          return $result['id'];
+        else
+          return null;
+    }
+}
+
   /*--------------------------------------------------------------*/
   /* Find group level
   /*--------------------------------------------------------------*/
