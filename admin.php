@@ -219,7 +219,7 @@
           </strong>
         </div>
         <div class="panel-body">
-          <canvas id="per_monthly_total_solds_chart" width="400px" height="400px"></canvas>
+          <canvas id="per_monthly_total_solds_chart" width="400px"></canvas>
           
           
         </div>
