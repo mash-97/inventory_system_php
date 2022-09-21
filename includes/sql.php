@@ -222,6 +222,16 @@ function tableExists($table){
     return find_by_sql($sql);
 
    }
+   /*--------------------------------------------------------------*/
+   /* Function for fetching all suppliers
+   /* 
+   /*--------------------------------------------------------------*/
+  function get_all_suppliers(){
+     global $db;
+     $sql  =" SELECT id, full_name, address, phone FROM suppliers;";
+    return find_by_sql($sql);
+
+   }
   /*--------------------------------------------------------------*/
   /* Function for Finding all product name
   /* Request coming from ajax.php for auto suggest

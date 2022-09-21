@@ -210,7 +210,7 @@
             <span>Monthly Sales</span>
             <span style="float: right">
               <select id="per_monthly_sold_year_select" class="form-select" aria-label="Default select example">
-                <option selected>Select Year : <?php echo $min_year; ?></option>
+                <option selected>Select Year : <?php echo $max_year; ?></option>
                 <?php for($i=$min_year; $i<=$max_year; $i++): ?>
                   <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                 <?php endfor; ?>

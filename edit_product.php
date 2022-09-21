@@ -8,6 +8,7 @@
 $product = find_by_id('products',(int)$_GET['id']);
 $all_categories = find_all('categories');
 $all_photo = find_all('media');
+$all_suppliers = find_all('suppliers');
 if(!$product){
   $session->msg("d","Missing product id.");
   redirect('product.php');
@@ -21,6 +22,7 @@ if(!$product){
    if(empty($errors)){
        $p_name  = remove_junk($db->escape($_POST['product-title']));
        $p_cat   = (int)$_POST['product-categorie'];
+       $p_sid   = (int)$_POST['product_supplier_id'];
        $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
        $p_buy   = remove_junk($db->escape($_POST['buying-price']));
        $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
@@ -31,7 +33,7 @@ if(!$product){
        }
        $query   = "UPDATE products SET";
        $query  .=" name ='{$p_name}', quantity ='{$p_qty}',";
-       $query  .=" buy_price ='{$p_buy}', sale_price ='{$p_sale}', categorie_id ='{$p_cat}',media_id='{$media_id}'";
+       $query  .=" buy_price ='{$p_buy}', sale_price ='{$p_sale}', categorie_id ='{$p_cat}',media_id='{$media_id}', supplier_id='{$p_sid}'";
        $query  .=" WHERE id ='{$product['id']}'";
        $result = $db->query($query);
                if($result && $db->affected_rows() === 1){
@@ -61,7 +63,7 @@ if(!$product){
         <div class="panel-heading">
           <strong>
             <span class="glyphicon glyphicon-th"></span>
-            <span>Add New Product</span>
+            <span>Edit Product</span>
          </strong>
         </div>
         <div class="panel-body">
@@ -93,6 +95,20 @@ if(!$product){
                         <option value="<?php echo (int)$photo['id'];?>" <?php if($product['media_id'] === $photo['id']): echo "selected"; endif; ?> >
                           <?php echo $photo['file_name'] ?></option>
                       <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-12">
+                    <select class="form-control" name="product_supplier_id">
+                      <option value="">Select Supplier</option>
+                    <?php  foreach ($all_suppliers as $cat): ?>
+                      <option value="<?php echo (int)$cat['id'] ?>">
+                        <?php echo $cat['full_name'] ?> (<?php echo $cat['address']; ?>)</option>
+                    <?php endforeach; ?>
                     </select>
                   </div>
                 </div>

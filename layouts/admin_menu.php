@@ -16,6 +16,16 @@
    </ul>
   </li>
   <li>
+    <a href="#" class="submenu-toggle" aria-expanded="true">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Suppliers</span>
+    </a>
+    <ul class="nav submenu">
+       <li><a href="suppliers.php">Manage Suppliers</a> </li>
+       <li><a href="add_supplier.php">Add Supplier</a> </li>
+   </ul>
+  </li>
+  <li>
     <a href="categorie.php" >
       <i class="glyphicon glyphicon-indent-left"></i>
       <span>Categories</span>

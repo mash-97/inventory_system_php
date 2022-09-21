@@ -12,7 +12,7 @@
     </a>
   </li>
   <li>
-    <a href="#" class="submenu-toggle">
+    <a href="#" class="submenu-toggle" aria-expanded="true">
       <i class="glyphicon glyphicon-th-large"></i>
       <span>Products</span>
     </a>
@@ -21,6 +21,7 @@
        <li><a href="add_product.php">Add product</a> </li>
    </ul>
   </li>
+  
   <li>
     <a href="media.php" >
       <i class="glyphicon glyphicon-picture"></i>
