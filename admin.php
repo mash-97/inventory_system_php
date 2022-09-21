@@ -288,30 +288,39 @@
     });
   }
   $(document).ready(()=>{
-    updatePMTSCByAjaxYear('<?php echo $max_year; ?>')
+    updatePMTSCByAjaxYear('<?php echo $max_year; ?>');
     console.log("document ready");
+    updateMPCByAjaxYear('<?php echo $max_year; ?>');
   });
+
   let pmsys = document.getElementById("per_monthly_sold_year_select")
   pmsys.onchange = ()=>{
     console.log("e.value: ", pmsys.value);
     updatePMTSCByAjaxYear(parseInt(pmsys.value));
+    updateMPCByAjaxYear(parseInt(pmsys.value));
   }
 
 
   function updateMonthlyProfitChart(year, per_monthly_profits){
-
+    console.log(transparent_color("blue", 0.9));
+    let expected_profits = [];
+    let actual_profits = [];
+    for(key in per_monthly_profits){
+      expected_profits.push(per_monthly_profits[key]['expected_profit']);
+      actual_profits.push(per_monthly_profits[key]['actual_profit']);
+    }
     let data = {
       labels: Object.keys(per_monthly_profits),
       datasets: [
         {
           label: 'Expected Profits',
-          data: [3, -1, 2],
+          data: expected_profits,
           borderColor: CHART_COLORS.red,
           backgroundColor: transparent_color("blue", 0.9), //'rgba(255, 99, 132, 0.5)',
         },
         {
           label: 'Actual Profits',
-          data: [6, 8, -9],
+          data: actual_profits,
           borderColor: CHART_COLORS.blue,
           backgroundColor: transparent_color("red", 0.9),
         }
@@ -339,20 +348,19 @@
       };
     new Chart("monthly_profit_chart", config);
   }
-  updateMonthlyProfitChart(2,2);
 
   function updateMPCByAjaxYear(year){
     $.ajax({
       type: "GET",
-      url: "apis/per_monthly_total_solds.php",
-      data: {year: year },
+      url: "apis/per_monthly_profits.php",
+      data: {year: year},
       dataType: 'json',
       encode: true
     }).done((response)=>{
       console.log(response);
       if(response.status_code==200){
         console.log(response.data);
-        updatePerMonthlyTotalSoldsChart(year, response.data);
+        updateMonthlyProfitChart(year, response.data);
       } 
       else{
         console.log("Bad Response from the server!"+response.status_code);

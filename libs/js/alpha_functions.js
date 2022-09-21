@@ -14,9 +14,9 @@ function __transrgb__ (alpha) {
     orange: `rgba(255, 159, 64, ${alpha})`,
     yellow: `rgba(255, 205, 86, ${alpha})`,
     green: `rgba(75, 192, 192, ${alpha})`,
-    blue: `rgba(54, 162, 235), ${alpha}`,
-    purple: `rgba(153, 102, 255), ${alpha}`,
-    grey: `rgba(201, 203, 207), ${alpha}`
+    blue: `rgba(54, 162, 235, ${alpha})`,
+    purple: `rgba(153, 102, 255, ${alpha})`,
+    grey: `rgba(201, 203, 207, ${alpha})`
   }
   return rgbas
 };
