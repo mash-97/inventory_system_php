@@ -198,10 +198,6 @@
         </div>
         <div class="panel-body">
           <canvas id="monthly_profit_chart" style="width:100%;max-width:800px"></canvas>
-
-          <script>
-          
-          </script>
                     
         </div>
         </div>
@@ -211,7 +207,7 @@
         <div class="panel-heading">
           <strong>
             <span class="glyphicon glyphicon-th"></span>
-            <span>Per Monthly Sales</span>
+            <span>Monthly Sales</span>
             <span style="float: right">
               <select id="per_monthly_sold_year_select" class="form-select" aria-label="Default select example">
                 <option selected>Select Year : <?php echo $min_year; ?></option>
@@ -236,10 +232,6 @@
 <?php include_once('layouts/footer.php'); ?>
 <script type="text/javascript">
 
-  // This JavaScript function always returns a random number between min and max (both included):
-  function random_int(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) ) + min;
-  }
 
 
 
@@ -255,7 +247,7 @@
     let bar_colors = [];
 
     for(let x=0; x<12; x++){
-      bar_colors.push(["red", "green","blue","orange","brown"][random_int(0, 4)]);
+      bar_colors.push(transparent_color(["red", "green","blue","orange","brown"][random_int(0, 4)], 1));
     }
 
     let ct = new Chart(per_monthly_total_solds_chart_ctx, {
@@ -307,31 +299,47 @@
 
 
   function updateMonthlyProfitChart(year, per_monthly_profits){
-    var xValues = [100,200,300,400,500,600,700,800,900,1000];
 
-    new Chart("monthly_profit_chart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [{ 
-          data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-          borderColor: "red",
-          fill: false
-        }, { 
-          data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-          borderColor: "green",
-          fill: false
-        }, { 
-          data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-          borderColor: "blue",
-          fill: false
-        }]
-      },
-      options: {
-        legend: {display: false}
-      }
-    });
+    let data = {
+      labels: Object.keys(per_monthly_profits),
+      datasets: [
+        {
+          label: 'Expected Profits',
+          data: [3, -1, 2],
+          borderColor: CHART_COLORS.red,
+          backgroundColor: transparent_color("blue", 0.9), //'rgba(255, 99, 132, 0.5)',
+        },
+        {
+          label: 'Actual Profits',
+          data: [6, 8, -9],
+          borderColor: CHART_COLORS.blue,
+          backgroundColor: transparent_color("red", 0.9),
+        }
+      ]
+    };
+    let config = {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Chart.js Bar Chart'
+            }
+          },
+          title: {
+            display: true,
+            text: 'Profits Per Month For '+year
+          }
+        },
+      };
+    new Chart("monthly_profit_chart", config);
   }
+  updateMonthlyProfitChart(2,2);
 
   function updateMPCByAjaxYear(year){
     $.ajax({
